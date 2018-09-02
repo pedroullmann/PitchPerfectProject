@@ -13,7 +13,7 @@ class RecordSoundsViewController: UIViewController {
 
     //MARK: Variables
     var audioRecorder: AVAudioRecorder!
-    let stopRecordingIdentifier = "goToStopRecording"
+    let stopRecordingIdentifier: String = "goToStopRecording"
     
     //MARK: Outlets
     @IBOutlet weak var recordingLabel: UILabel!
@@ -34,6 +34,10 @@ class RecordSoundsViewController: UIViewController {
             let recordedAudioURL = sender as! URL
             playSoundsVC.recordedAudioURL = recordedAudioURL
         }
+    }
+    
+    @IBAction func unwindToRecordSounds(segue:UIStoryboardSegue) {
+        //I can pass some data between viewControllers...
     }
     
     //MARK: Actions
@@ -65,15 +69,10 @@ class RecordSoundsViewController: UIViewController {
     
     //MARK: Configure the UIElements
     func configureUI(_ enabled: Bool) {
-        if enabled {
-            recordingLabel.text = "Recording in Progress"
-            recordButton.isEnabled = !enabled
-            stopRecordingButton.isEnabled = enabled
-        } else {
-            recordingLabel.text = "Tap to Record"
-            recordButton.isEnabled = !enabled
-            stopRecordingButton.isEnabled = enabled
-        }
+        let recordingText = enabled ? "Recording in Progress" : "Tap to Record"
+        recordingLabel.text = recordingText
+        recordButton.isEnabled = !enabled
+        stopRecordingButton.isEnabled = enabled
     }
 }
 
@@ -84,7 +83,14 @@ extension RecordSoundsViewController: AVAudioRecorderDelegate {
         if flag {
             performSegue(withIdentifier: stopRecordingIdentifier, sender: audioRecorder.url)
         } else {
-            print("recording was not successful")
+            let alertController = UIAlertController(title: "Error", message: "Recording was not successful", preferredStyle: .alert)
+            let defaultAction = UIAlertAction(title: "Close", style: .default, handler: nil)
+            
+            //Adding the action
+            alertController.addAction(defaultAction)
+            
+            //Presenting alert
+            present(alertController, animated: true, completion: nil)
         }
     }
 }

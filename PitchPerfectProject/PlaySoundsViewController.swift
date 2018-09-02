@@ -25,6 +25,7 @@ class PlaySoundsViewController: UIViewController {
     var audioEngine:AVAudioEngine!
     var audioPlayerNode: AVAudioPlayerNode!
     var stopTimer: Timer!
+    let unwindSegueIdentifier: String = "unwindSegueToRecordSounds"
     
     enum ButtonType: Int {
         case slow = 0, fast, chipmunk, vader, echo, reverb
@@ -65,7 +66,7 @@ class PlaySoundsViewController: UIViewController {
     }
     
     @IBAction func newSoundPressed(_ sender: Any) {
-        dismiss (animated: true, completion: nil)
+        performSegue(withIdentifier: unwindSegueIdentifier, sender: nil)
     }
 }
 
